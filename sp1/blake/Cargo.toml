@@ -5,5 +5,5 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-sp1-zkvm = "5.1.1"
+sp1-zkvm = "5.2.2"
 blake2 = { version = "0.10.6", default-features = false }

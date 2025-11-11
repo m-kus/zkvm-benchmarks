@@ -172,6 +172,9 @@ def plot_benchmark(df, title, y_label, bench_tuple, column_name):
     }
 
     plt.figure(figsize=(8, 6))
+    
+    # Clean the 'n' column - replace dictionary values with 0
+    df["n"] = df["n"].apply(lambda x: 0 if isinstance(x, dict) else x)
 
     for col in df.columns[1:]:
         if col in style_map:
@@ -179,6 +182,9 @@ def plot_benchmark(df, title, y_label, bench_tuple, column_name):
         else:
             marker, color = ('x', 'gray')
 
+        # Replace dictionary values (failed runs) with 0
+        df[col] = df[col].apply(lambda x: 0 if isinstance(x, dict) else x)
+        
         non_zero = df[col] != 0
         plt.plot(df["n"][non_zero], df[col][non_zero], 
                     marker=marker, color=color, label=col, linestyle='-')
