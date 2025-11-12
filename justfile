@@ -15,6 +15,7 @@ SHA3_ARG_LOCAL := "256 512 1024 2048 4096 8192"
 SHA3_CHAIN_ARG_LOCAL := "64 128 256 512 1024 2048 4096"
 MATMUL_ARG_LOCAL := "4 8 16 32 64"
 EC_ARG_LOCAL := "16 32 64 128 256 512 1024 2048"
+ECDSA_ARG_LOCAL := "16 32 64 128 256 512 1024 2048"
 BLAKE_ARG_LOCAL := "256 512 1024 2048 4096 8192"
 BLAKE_CHAIN_ARG_LOCAL := "64 128 256 512 1024 2048 4096"
 
@@ -487,7 +488,7 @@ bench-stone-ec ec_args verifier_iterations="1":
 build-stwo: build-utils
     cd stwo && RUSTFLAGS="-C target-cpu=native -C opt-level=3" cargo build --release
 
-bench-stwo fib_args sha2_args sha2_chain_args sha3_args sha3_chain_args matmul_args ec_args blake_args blake_chain_args: \
+bench-stwo fib_args sha2_args sha2_chain_args sha3_args sha3_chain_args matmul_args ec_args ecdsa_args blake_args blake_chain_args: \
     build-stwo
     just bench-stwo-fib "{{fib_args}}" "{{VERIFIER_ITERATIONS}}"
     just bench-stwo-sha2 "{{sha2_args}}" "{{VERIFIER_ITERATIONS}}"
@@ -496,6 +497,7 @@ bench-stwo fib_args sha2_args sha2_chain_args sha3_args sha3_chain_args matmul_a
     just bench-stwo-sha3-chain "{{sha3_chain_args}}" "{{VERIFIER_ITERATIONS}}"
     just bench-stwo-mat-mul "{{matmul_args}}" "{{VERIFIER_ITERATIONS}}"
     just bench-stwo-ec "{{ec_args}}" "{{VERIFIER_ITERATIONS}}"
+    just bench-stwo-ecdsa "{{ecdsa_args}}" "{{VERIFIER_ITERATIONS}}"
     just bench-stwo-blake-precompile "{{blake_args}}" "{{VERIFIER_ITERATIONS}}"
     just bench-stwo-blake-chain-precompile "{{blake_chain_args}}" "{{VERIFIER_ITERATIONS}}"
 
@@ -525,6 +527,9 @@ bench-stwo-mat-mul matmul_args verifier_iterations="1":
 
 bench-stwo-ec ec_args verifier_iterations="1":
     for arg in {{ec_args}}; do just run-bench-stwo "ec" "$arg" "{{verifier_iterations}}"; done
+
+bench-stwo-ecdsa ecdsa_args verifier_iterations="1":
+    for arg in {{ecdsa_args}}; do just run-bench-stwo "ecdsa" "$arg" "{{verifier_iterations}}"; done
 
 bench-stwo-blake-precompile blake_args verifier_iterations="1":
     for arg in {{blake_args}}; do just run-bench-stwo "blake-precompile" "$arg" "{{verifier_iterations}}"; done
