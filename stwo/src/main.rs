@@ -41,6 +41,7 @@ fn main() {
         "blake-chain-precompile" => bench_blake_chain_precompile(&config),
         "mat-mul" => bench_mat_mul(&config),
         "ec" => bench_ec(&config),
+        "ecdsa" => bench_ecdsa(&config),
         _ => unreachable!()
     };
     
@@ -147,6 +148,23 @@ fn bench_sha3_chain(config: &BenchmarkConfig) -> BenchmarkResult {
     let memory = "./sha3-chain/memory.bin".to_string();
 
     let out_dir = "./sha3-chain".to_string();
+    prove_and_verify(program_input, program_path, output_path, public_input, private_input, trace, memory, out_dir, config.verifier_iterations)
+}
+
+fn bench_ecdsa(config: &BenchmarkConfig) -> BenchmarkResult {
+    let input = format!("{{\"iterations\": {}}}", config.n);
+    let program_input = "./ecdsa/input.json".to_string();
+    fs::write(&program_input, input).expect("Failed to write input file");
+
+    let program_path = "./ecdsa/ecdsa.cairo".to_string();
+    let output_path = "./ecdsa/ecdsa.json".to_string();
+
+    let public_input = "./ecdsa/public_input.json".to_string();
+    let private_input = "./ecdsa/private_input.json".to_string();
+    let trace = "./ecdsa/trace.bin".to_string();
+    let memory = "./ecdsa/memory.bin".to_string();
+
+    let out_dir = "./ecdsa".to_string();
     prove_and_verify(program_input, program_path, output_path, public_input, private_input, trace, memory, out_dir, config.verifier_iterations)
 }
 
